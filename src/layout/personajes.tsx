@@ -1,11 +1,4 @@
 import React, { useState, useEffect }  from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,13 +6,19 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
+import Cookies from 'universal-cookie';
+import theme from '../css/theme';
+import HeaderCookie from './head-index';
 import SearchApi from '../services/bbService';
-import StickyHeadTable from '../components/table';
-import CollapsibleTable from '../components/table-test';
+import { Label } from '@material-ui/icons';
+import ImgCard from '../components/card';
+import { Card } from '@material-ui/core';
 
+const cookies = new Cookies();
 interface Character {
     name: string;
     char_id: string;
+    img: string;
   }
 
 function Copyright() {
@@ -27,15 +26,13 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      byRafaa
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
 }
-
-
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -67,39 +64,67 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
-  appBarSpacer: theme.mixins.toolbar,
-    content: {
-      flexGrow: 1,
-      height: "100vh",
-      overflow: "auto",
-    },
-    container: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
-    },
 }));
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-export default function Album() {
+export default function Personajes() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [dataCharacter, setDataCharacter] = useState<null | Character[]>(null);
 
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await SearchApi.search();
-      setDataCharacter(data.results);
-      console.log(data);
+      setDataCharacter(data);
     };
 
     fetchData();
   }, []);
 
+
   function FormRow() {
     if (dataCharacter)
       return (
-        <React.Fragment></React.Fragment>
+        <React.Fragment>
+
+          <Grid item xs={4}>
+              
+          <ImgCard
+              name={dataCharacter[0].name}
+              endpoint={dataCharacter[0].char_id}
+              img={dataCharacter[0].img}
+            ></ImgCard>
+             </Grid>
+            <Grid item xs={4}>
+            <ImgCard
+              name={dataCharacter[1].name}
+              endpoint={dataCharacter[1].char_id}
+              img={dataCharacter[1].img}
+            ></ImgCard>
+            </Grid>
+            <Grid item xs={4}>
+            <ImgCard
+              name={dataCharacter[2].name}
+              endpoint={dataCharacter[2].char_id}
+              img={dataCharacter[2].img}
+            ></ImgCard>
+            </Grid>
+            
+         
+
+            
+
+
+
+
+
+        </React.Fragment>
       );
     else return null;
   }
@@ -107,20 +132,27 @@ export default function Album() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <CameraIcon className={classes.icon} />
-          <Typography variant="h6" color="inherit" noWrap>
-            Album layout
-          </Typography>
-        </Toolbar>
-      </AppBar>
+        <HeaderCookie></HeaderCookie>
       <main>
+        {/* Hero unit */}
+        <div className={classes.heroContent}>
+          <Container maxWidth="sm">
+            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+              Breaking Bad
+            </Typography>
+            <Typography variant="h5" align="center" color="textSecondary" paragraph>
+            Listado de Personajes de la Serie                
+            </Typography>
+          </Container>
+        </div>
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
-          <Grid container spacing={4}>
-            <CollapsibleTable></CollapsibleTable>
-          </Grid>
+          <Grid container spacing={3}>
+              <Grid container item xs={12} spacing={3}>
+                <FormRow />
+              </Grid>
+             
+            </Grid>
         </Container>
       </main>
       {/* Footer */}

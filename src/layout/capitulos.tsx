@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Album() {
+export default function Capitulos() {
   const classes = useStyles();
 
   return (
@@ -102,7 +102,7 @@ export default function Album() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary" href="./personajes">
+                    <Button size="small" color="primary">
                       View
                     </Button>
                   </CardActions>

@@ -98,9 +98,7 @@ export default function SignInSide(){
             alert(`Bienvenido ${respuesta.nombre} ${respuesta.apPaterno}`);
             window.location.href="./inicio";
         }else{
-            
             alert('El usuario o la contraseña no son correctos');
-            
         }
     })
     .catch(error=>{
@@ -124,11 +122,8 @@ export default function SignInSide(){
                 Sign in
             </Typography>
             
-            <input defaultValue="Username" {...register("username")}/>
-
-                
-                
-            <input defaultValue="Password" {...register("password")} />
+            <input defaultValue="Username" {...register("username")}/> 
+            <input type="password" defaultValue="Password" {...register("password")} required/>
                 <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
@@ -139,7 +134,6 @@ export default function SignInSide(){
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                
                 >
                 Sign In
                 </Button>
@@ -158,7 +152,6 @@ export default function SignInSide(){
                 <Box mt={5}>
                 <Copyright />
                 </Box>
-            
         </div>
         </form>
       </Grid>

@@ -22,7 +22,9 @@ export const request = (url:string, method: string, data?: any) => {
   return fetch(url, {
     method,
     headers: {
-      "Content-Type": "application/json",
+      'Accept': ' application/json',
+            'Content-type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
     },
   })
     .then(checkStatus)
