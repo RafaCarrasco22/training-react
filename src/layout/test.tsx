@@ -1,5 +1,5 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
+import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -126,7 +126,7 @@ export default function Album() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary">
+                    <Button size="small" color="primary" href="./capitulos">
                       View
                     </Button>
                     
@@ -146,8 +146,9 @@ export default function Album() {
                       Deaths
                     </Typography>
                     <Typography>
-                      Deaths de la serie :(
+                      Deaths de la serie
                     </Typography>
+                    <SentimentVeryDissatisfiedIcon></SentimentVeryDissatisfiedIcon>
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">

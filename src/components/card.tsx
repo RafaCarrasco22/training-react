@@ -45,7 +45,6 @@ export default function ImgCard(props: Props) {
     const fetchData = async () => {
       const data = await SearchApi.searchCharacter(endpoint);
       setDataCharacter(data);
-      console.log(data[0].img);
     };
 
     fetchData();

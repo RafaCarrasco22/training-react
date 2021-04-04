@@ -11,11 +11,11 @@ import TableRow from "@material-ui/core/TableRow";
 import SearchApi from "../services/bbService";
 import Button from "@material-ui/core/Button";
 
-interface CharacterTable {
-  count: number;
-  next: string;
-  previous: string;
-  results: any;
+interface EpisodesTable {  
+    count: number;
+    next: string;
+    previous: string;
+    results: any;
 }
 
 interface Column {
@@ -27,9 +27,9 @@ interface Column {
 }
 
 const columns: Column[] = [
-  { id: "char_id", label: "Id", minWidth: 25 },
-  { id: "name", label: "Nombre", minWidth: 170 },
-  { id: "img", label: "Ver detalle", minWidth: 40 },
+  { id: "id", label: "Episodio", minWidth: 25 },
+  { id: "title", label: "Nombre", minWidth: 170 },
+  { id: "season", label: "Season", minWidth: 40 },
 ];
 
 const useStyles = makeStyles({
@@ -41,16 +41,20 @@ const useStyles = makeStyles({
   },
 });
 
-interface Character {
-  name: string;
-  char_id: string;
+interface Episodio {
+  title: string;
+  [episode_id: string]:any;
+    season: string;
+    air_date: string;
+    characters: any;
+    episode: string;
 }
 
 export default function StickyHeadTable() {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [dataCharacter, setDataCharacter] = useState<null | Character[]>(null);
+  const [dataEpisode, setDataEpisode] = useState<null | Episodio[]>(null);
 
   const [open, setOpen] = React.useState(false);
   const [name, setName] = useState("");
@@ -58,8 +62,9 @@ export default function StickyHeadTable() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await SearchApi.searchData();
-      setDataCharacter(data.results);
+      const data = await SearchApi.searchEpisodes();
+      setDataEpisode(data);
+      console.log(data[0].title);
     };
 
     fetchData();
@@ -86,6 +91,11 @@ export default function StickyHeadTable() {
     setUrl("");
   };
 
+  const handleClick = (title: string, episode:any) => {
+    setName(title);
+    setUrl(episode);
+    handleOpen();
+  };
 
   return (
     <>
@@ -106,29 +116,16 @@ export default function StickyHeadTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {dataCharacter &&
-                dataCharacter
+              {dataEpisode &&
+                dataEpisode
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                         {columns.map((column, idx) => {
                           const value =
-                            column.id === "id" ? index + 1 : 13;
+                            column.id === 'id' ? index + 1 : row[column.id];
 
-                          if (column.id === "url") {
-                            return (
-                              <TableCell key={idx} align={column.align}>
-                                <Button
-                                  variant="contained"
-                                  color="primary"
-                                  
-                                >
-                                  Ver detalle
-                                </Button>
-                              </TableCell>
-                            );
-                          }
                           return (
                             <TableCell key={idx} align={column.align}>
                               {column.format && typeof value === "number"
@@ -146,7 +143,7 @@ export default function StickyHeadTable() {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={dataCharacter ? dataCharacter.length : 0}
+          count={dataEpisode ? dataEpisode.length : 0}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}

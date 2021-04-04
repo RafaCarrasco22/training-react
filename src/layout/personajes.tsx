@@ -7,18 +7,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import Cookies from 'universal-cookie';
-import theme from '../css/theme';
 import HeaderCookie from './head-index';
 import SearchApi from '../services/bbService';
-import { Label } from '@material-ui/icons';
 import ImgCard from '../components/card';
-import { Card } from '@material-ui/core';
+import ReactPaginate from 'react-paginate';
 
 const cookies = new Cookies();
 interface Character {
     name: string;
     char_id: string;
     img: string;
+    nickname: string;
   }
 
 function Copyright() {
@@ -71,6 +70,10 @@ export default function Personajes() {
   const [open, setOpen] = useState(true);
   const [dataCharacter, setDataCharacter] = useState<null | Character[]>(null);
 
+  const [pageNumber, setPageNumber] = useState(0);
+  const usersPerPage = 100;
+  const pagesVisited = pageNumber * usersPerPage;
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -87,43 +90,27 @@ export default function Personajes() {
     fetchData();
   }, []);
 
+  //const pageCount = Math.ceil(dataCharacter!.length / usersPerPage);
+
+  
 
   function FormRow() {
     if (dataCharacter)
       return (
         <React.Fragment>
-
-          <Grid item xs={4}>
-              
-          <ImgCard
-              name={dataCharacter[0].name}
-              endpoint={dataCharacter[0].char_id}
-              img={dataCharacter[0].img}
-            ></ImgCard>
-             </Grid>
-            <Grid item xs={4}>
-            <ImgCard
-              name={dataCharacter[1].name}
-              endpoint={dataCharacter[1].char_id}
-              img={dataCharacter[1].img}
-            ></ImgCard>
-            </Grid>
-            <Grid item xs={4}>
-            <ImgCard
-              name={dataCharacter[2].name}
-              endpoint={dataCharacter[2].char_id}
-              img={dataCharacter[2].img}
-            ></ImgCard>
-            </Grid>
-            
-         
-
-            
-
-
-
-
-
+            {
+                dataCharacter
+                .slice(pagesVisited, pagesVisited + usersPerPage)
+                .map(Character=>(
+                    <Grid item xs={4}>
+                    <ImgCard
+                        name={Character.name}
+                        endpoint={Character.char_id}
+                        img={Character.img}
+                        ></ImgCard>
+                    </Grid>
+                ))
+            }
         </React.Fragment>
       );
     else return null;

@@ -1,7 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import SignInSide from './layout/login';
 import Routes from './routes/routes';
 
 function App() {

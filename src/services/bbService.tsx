@@ -7,6 +7,6 @@ export default class SearchApi {
   static searchCharacter = (url: string): Promise<Promise<any>> =>
     request("https://www.breakingbadapi.com/api/characters/?", "GET");
 
-    static searchData = (): Promise<Promise<any>> =>
-    request("https://www.breakingbadapi.com/api/", "GET");
+    static searchEpisodes = (): Promise<Promise<any>> =>
+    request("https://www.breakingbadapi.com/api/episodes/", "GET");
 }

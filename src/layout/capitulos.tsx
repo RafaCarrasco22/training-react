@@ -1,10 +1,4 @@
-import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import React, { useState, useEffect }  from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,10 +7,20 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import Cookies from 'universal-cookie';
-import theme from '../css/theme';
 import HeaderCookie from './head-index';
+import SearchApi from '../services/bbService';
+import ImgCard from '../components/card';
+import ReactPaginate from 'react-paginate';
+import StickyHeadTable from '../components/table';
 
-const cookies = new Cookies();
+interface Episode {
+  title: string;
+    episode_id: string;
+    season: string;
+    air_date: string;
+    characters: any;
+    episode: string;
+  }
 
 function Copyright() {
   return (
@@ -65,7 +69,24 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Capitulos() {
   const classes = useStyles();
+  const [open, setOpen] = useState(true);
+  const [dataEpisode, setDataEpisode] = useState<null | Episode[]>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(10);
 
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await SearchApi.searchEpisodes();
+      setDataEpisode(data);
+      console.log(data);
+    };
+    fetchData();
+  }, []);
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
   return (
     <React.Fragment>
       <CssBaseline />
@@ -78,87 +99,17 @@ export default function Capitulos() {
               Breaking Bad
             </Typography>
             <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Breaking Bad is regarded as one of the greatest television series of all time, and with 16 Primetime Emmy Awards, it is worthy of it's own API. In my search, I was unable to find an API that contained the amount of information I wanted, so I created one.
+            Listado de Capítulos de la Serie                
             </Typography>
           </Container>
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
-          <Grid container spacing={4}>
-            
-              <Grid item  xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image="https://imagenes.milenio.com/e9l0w0jhOVnzoPEhHF4eBPf0jUc=/958x596/smart/https://www.milenio.com/uploads/media/2019/09/19/personajes-breaking-bad-regresaran-camino_17_0_610_379.jpg"
-                    title="Personajes"
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Personajes
-                    </Typography>
-                    <Typography>
-                      List of Personajes
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
-                  </CardActions>
-                </Card>
+          {/* <FormRow></FormRow> */}
+          <Grid container item xs={12} spacing={3}>
+                <StickyHeadTable />
               </Grid>
-
-
-              <Grid item xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image="https://images-na.ssl-images-amazon.com/images/I/A17RoTM3CfL._SL1500_.jpg"
-                    title="Chapters"
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Capítulos
-                    </Typography>
-                    <Typography>
-                      Lista de capítulos by Temporada
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
-                    
-                  </CardActions>
-                </Card>
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image="https://cdn.images.express.co.uk/img/dynamic/36/590x/el-camino-walter-white-death-1188309.jpg?r=1570608167711"
-                    title="Deaths"
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Deaths
-                    </Typography>
-                    <Typography>
-                      Deaths de la serie :(
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
-                    
-                  </CardActions>
-                </Card>
-              </Grid>
-            
-          </Grid>
+          
         </Container>
       </main>
       {/* Footer */}
